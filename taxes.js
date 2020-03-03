@@ -265,7 +265,7 @@ function calculateTaxAndShow(evt) {
     var allFees = excise + duty + nds;
     var woPF = price + allFees;
     var resultPrice = woPF + pensionFund;
-    var percentPrice = Math.round((allFees + pensionFund) * 100 / price);
+    //var percentPrice = Math.round((allFees + pensionFund) * 100 / price);
 
     showResultTable({
         origPrice: price,
@@ -273,7 +273,7 @@ function calculateTaxAndShow(evt) {
         duty: duty,
         pensionFund: pensionFund,
         excise: excise,
-        percentPrice: percentPrice,
+        //percentPrice: percentPrice,
         allFees: allFees,
         resultPrice: resultPrice,
         currency: currency
@@ -301,7 +301,7 @@ function showResultTable(data) {
     txt('.taxes-table .pension-fund', 'pensionFund');
     txt('.taxes-table .excise', 'excise');
     txt('.taxes-table .all-fees', 'allFees');
-    txt('.taxes-table .percent-price', 'percentPrice');
+    //txt('.taxes-table .percent-price', 'percentPrice');
 
     var resultBlock = document.querySelector('.result-block');
     resultBlock.classList.remove('d-none');
