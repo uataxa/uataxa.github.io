@@ -109,7 +109,7 @@ var taxForms = document.querySelectorAll('.tax-form');
 
 function calculateTaxAndShow(evt) {
     evt.preventDefault();
-console.log(CURRENT_RATES);
+
     var fields = this.elements;
     var formName = this.name;
     var price = +fields.price.value;
