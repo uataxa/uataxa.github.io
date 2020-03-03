@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Tax</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <style>
+        .nav-fill .nav-item {
+            color: #333;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+            -moz-box-shadow: 0 7px 10px 0 rgba(61, 155, 213, 0.24);
+            -webkit-box-shadow: 0 7px 10px 0 rgba(61, 155, 213, 0.24);
+            box-shadow: 0 7px 10px 0 rgba(61, 155, 213, 0.24);
+            background: #78c5f1;
+            background: -webkit-linear-gradient(#7ae2f1 0%, #78c5f1 100%);
+            background: -o-linear-gradient(#7ae2f1 0%, #78c5f1 100%);
+            background: linear-gradient(#7ae2f1 0%, #78c5f1 100%);
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7ae2f1', endColorstr='#78c5f1',GradientType=0 );
+        }
+        button {
+            color: #fff;
+            text-align: center;
+            margin: 0 auto 50px auto;
+            padding: 15px 50px;
+            width: 245px;
+            display: block;
+            border: 0 !important;
+            border-radius: 5px;
+            -moz-box-shadow: 0 7px 10px 0 rgba(61, 155, 213, 0.24);
+            -webkit-box-shadow: 0 7px 10px 0 rgba(61, 155, 213, 0.24);
+            box-shadow: 0 7px 10px 0 rgba(61, 155, 213, 0.24);
+            background: #78c5f1;
+            background: -webkit-linear-gradient(#7ae2f1 0%, #78c5f1 100%);
+            background: -o-linear-gradient(#7ae2f1 0%, #78c5f1 100%);
+            background: linear-gradient(#7ae2f1 0%, #78c5f1 100%);
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7ae2f1', endColorstr='#78c5f1',GradientType=0 );
+            text-decoration: none;
+            transition: all linear .5s;
+            outline: none;
+        }
+        button:hover {
+            text-decoration: none;
+            background: #78c5f1;
+            background: -moz-linear-gradient(top, #78c5f1 0%, #5eb6f0 100%);
+            background: -webkit-linear-gradient(top, #78c5f1 0%, #5eb6f0 100%);
+            background: linear-gradient(to bottom, #78c5f1 0%, #5eb6f0 100%);
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#78c5f1', endColorstr='#5eb6f0',GradientType=0 );
+        }
+        button:focus {
+            border: none !important;
+            outline: 0 !important;
+        }
+        h3 {
+            font-weight: bold;
+            font-size: 2.25rem;
+            color: #3ecee9;
+            text-align: center;
+            text-transform: uppercase;
+            text-shadow: 0 0 19px white;
+            margin-bottom: 30px;
+        }
+        .table-secondary, .table-secondary > td, .table-secondary > th {
+            background-color: #3ecee9;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+<div class="container" id="container-main">
+    <h3 class="mb-4">Калькулятор растаможки</h3>
+    <nav>
+        <div class="nav nav-pills nav-fill" id="nav-tab" role="tablist">
+            <a class="tab-item nav-item nav-link active" id="nav-car-tab" data-toggle="tab" href="#nav-car" role="tab"
+               aria-controls="nav-car" aria-selected="true" data-form-name="car">Легковые</a>
+            <a class="tab-item nav-item nav-link" id="nav-electric-tab" data-toggle="tab" href="#nav-electric"
+               role="tab" aria-controls="nav-electric" aria-selected="false">Электро</a>
+            <a class="tab-item nav-item nav-link" id="nav-hybrid-tab" data-toggle="tab" href="#nav-hybrid" role="tab"
+               aria-controls="nav-hybrid" aria-selected="false">Гибрид</a>
+            <a class="tab-item nav-item nav-link" id="nav-motocycle-tab" data-toggle="tab" href="#nav-motocycle"
+               role="tab" aria-controls="nav-motocycle" aria-selected="false">Мото</a>
+            <a class="tab-item nav-item nav-link" id="nav-truck-tab" data-toggle="tab" href="#nav-truck" role="tab"
+               aria-controls="nav-truck" aria-selected="false">Грузовые</a>
+        </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-car" role="tabpanel" aria-labelledby="nav-car-tab">
+            <form name="car" class="mt-4 tax-form" method="post">
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label for="currencyAuto">Валюта</label>
+                        <select name="currency" id="currencyAuto" class="form-control">
+                            <option value="EUR" selected="">€</option>
+                            <option value="USD">$</option>
+                            <option value="UAH">грн.</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-8">
+                        <label for="priceAuto">Стоимость</label>
+                        <input name="price" class="form-control" id="priceAuto" placeholder="Стоимость" value="10000">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="countryAuto">Страна</label>
+                        <select name="country" id="countryAuto" class="form-control">
+                            <option value="default" selected="">Другие</option>
+                            <option value="eu">ЕС/ЕАСТ</option>
+                            <option value="canada">Канада</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="volumeAuto">Объем двигателя</label>
+                        <select name="volume" id="volumeAuto" class="form-control">
+                            <option value="0.5">0.5 дм³</option>
+                            <option value="0.6">0.6 дм³</option>
+                            <option value="0.7">0.7 дм³</option>
+                            <option value="0.8">0.8 дм³</option>
+                            <option value="0.9">0.9 дм³</option>
+                            <option value="1.0">1.0 дм³</option>
+                            <option value="1.1">1.1 дм³</option>
+                            <option value="1.2">1.2 дм³</option>
+                            <option value="1.3">1.3 дм³</option>
+                            <option value="1.4">1.4 дм³</option>
+                            <option value="1.5" selected="">1.5 дм³</option>
+                            <option value="1.6">1.6 дм³</option>
+                            <option value="1.7">1.7 дм³</option>
+                            <option value="1.8">1.8 дм³</option>
+                            <option value="1.9">1.9 дм³</option>
+                            <option value="2.0">2.0 дм³</option>
+                            <option value="2.1">2.1 дм³</option>
+                            <option value="2.2">2.2 дм³</option>
+                            <option value="2.3">2.3 дм³</option>
+                            <option value="2.4">2.4 дм³</option>
+                            <option value="2.5">2.5 дм³</option>
+                            <option value="2.6">2.6 дм³</option>
+                            <option value="2.7">2.7 дм³</option>
+                            <option value="2.8">2.8 дм³</option>
+                            <option value="2.9">2.9 дм³</option>
+                            <option value="3.0">3.0 дм³</option>
+                            <option value="3.1">3.1 дм³</option>
+                            <option value="3.2">3.2 дм³</option>
+                            <option value="3.3">3.3 дм³</option>
+                            <option value="3.4">3.4 дм³</option>
+                            <option value="3.5">3.5 дм³</option>
+                            <option value="3.6">3.6 дм³</option>
+                            <option value="3.7">3.7 дм³</option>
+                            <option value="3.8">3.8 дм³</option>
+                            <option value="3.9">3.9 дм³</option>
+                            <option value="4.0">4.0 дм³</option>
+                            <option value="4.1">4.1 дм³</option>
+                            <option value="4.2">4.2 дм³</option>
+                            <option value="4.3">4.3 дм³</option>
+                            <option value="4.4">4.4 дм³</option>
+                            <option value="4.5">4.5 дм³</option>
+                            <option value="4.6">4.6 дм³</option>
+                            <option value="4.7">4.7 дм³</option>
+                            <option value="4.8">4.8 дм³</option>
+                            <option value="4.9">4.9 дм³</option>
+                            <option value="5.0">5.0 дм³</option>
+                            <option value="5.1">5.1 дм³</option>
+                            <option value="5.2">5.2 дм³</option>
+                            <option value="5.3">5.3 дм³</option>
+                            <option value="5.4">5.4 дм³</option>
+                            <option value="5.5">5.5 дм³</option>
+                            <option value="5.6">5.6 дм³</option>
+                            <option value="5.7">5.7 дм³</option>
+                            <option value="5.8">5.8 дм³</option>
+                            <option value="5.9">5.9 дм³</option>
+                            <option value="6.0">6.0 дм³</option>
+                            <option value="6.1">6.1 дм³</option>
+                            <option value="6.2">6.2 дм³</option>
+                            <option value="6.3">6.3 дм³</option>
+                            <option value="6.4">6.4 дм³</option>
+                            <option value="6.5">6.5 дм³</option>
+                            <option value="6.6">6.6 дм³</option>
+                            <option value="6.7">6.7 дм³</option>
+                            <option value="6.8">6.8 дм³</option>
+                            <option value="6.9">6.9 дм³</option>
+                            <option value="7.0">7.0 дм³</option>
+                            <option value="7.1">7.1 дм³</option>
+                            <option value="7.2">7.2 дм³</option>
+                            <option value="7.3">7.3 дм³</option>
+                            <option value="7.4">7.4 дм³</option>
+                            <option value="7.5">7.5 дм³</option>
+                            <option value="7.6">7.6 дм³</option>
+                            <option value="7.7">7.7 дм³</option>
+                            <option value="7.8">7.8 дм³</option>
+                            <option value="7.9">7.9 дм³</option>
+                            <option value="8.0">8.0 дм³</option>
+                            <option value="8.1">8.1 дм³</option>
+                            <option value="8.2">8.2 дм³</option>
+                            <option value="8.3">8.3 дм³</option>
+                            <option value="8.4">8.4 дм³</option>
+                            <option value="8.5">8.5 дм³</option>
+                            <option value="8.6">8.6 дм³</option>
+                            <option value="8.7">8.7 дм³</option>
+                            <option value="8.8">8.8 дм³</option>
+                            <option value="8.9">8.9 дм³</option>
+                            <option value="9.0">9.0 дм³</option>
+                            <option value="9.1">9.1 дм³</option>
+                            <option value="9.2">9.2 дм³</option>
+                            <option value="9.3">9.3 дм³</option>
+                            <option value="9.4">9.4 дм³</option>
+                            <option value="9.5">9.5 дм³</option>
+                            <option value="9.6">9.6 дм³</option>
+                            <option value="9.7">9.7 дм³</option>
+                            <option value="9.8">9.8 дм³</option>
+                            <option value="9.9">9.9 дм³</option>
+                            <option value="10.0">10.0 дм³</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="motorAuto">Тип топлива</label>
+                        <select name="motor" id="motorAuto" class="form-control">
+                            <option value="petrol" selected="">Бензин</option>
+                            <option value="diesel">Дизель</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="yearAuto">Год выпуска</label>
+                        <select name="year" id="yearAuto" class="form-control">
+                            <option value="2020" selected="">2019-2020</option>
+                            <option value="2018">2018</option>
+                            <option value="2017">2017</option>
+                            <option value="2016">2016</option>
+                            <option value="2015">2015</option>
+                            <option value="2014">2014</option>
+                            <option value="2013">2013</option>
+                            <option value="2012">2012</option>
+                            <option value="2011">2011</option>
+                            <option value="2010">2010</option>
+                            <option value="2009">2009</option>
+                            <option value="2008">2008</option>
+                            <option value="2007">2007</option>
+                            <option value="2006">2006</option>
+                            <option value="2005">2005</option>
+                            <option value="2004">2004 и старше</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-secondary btn-lg btn-block">Расчитать стоимость</button>
+            </form>
+        </div>
+        <div class="tab-pane fade" id="nav-electric" role="tabpanel" aria-labelledby="nav-electric-tab">
+            <form name="electric" class="mt-4 tax-form" method="post">
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label for="currencyElectric">Валюта</label>
+                        <select name="currency" id="currencyElectric" class="form-control">
+                            <option value="EUR" selected="">€</option>
+                            <option value="USD">$</option>
+                            <option value="UAH">грн.</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-9">
+                        <label for="priceElectric">Стоимость</label>
+                        <input name="price" class="form-control" id="priceElectric" placeholder="Стоимость"
+                               value="10000">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="powerElectric">Мощность, кВт⋅ч</label>
+                        <input name="power" class="form-control" id="powerElectric" placeholder="Мощность, кВт⋅ч"
+                               value="150">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-secondary btn-lg btn-block">Расчитать стоимость</button>
+            </form>
+        </div>
+        <div class="tab-pane fade" id="nav-hybrid" role="tabpanel" aria-labelledby="nav-hybrid-tab">
+            <form name="hybrid" class="mt-4 tax-form" method="post">
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label for="currencyHybrid">Валюта</label>
+                        <select name="currency" id="currencyHybrid" class="form-control">
+                            <option value="EUR" selected="">€</option>
+                            <option value="USD">$</option>
+                            <option value="UAH">грн.</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-8">
+                        <label for="priceHybrid">Стоимость</label>
+                        <input name="price" class="form-control" id="priceHybrid" placeholder="Стоимость" value="10000">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="countryHybrid">Страна</label>
+                        <select name="country" id="countryHybrid" class="form-control">
+                            <option value="default" selected="">Другие</option>
+                            <option value="eu">ЕС</option>
+                            <option value="east">ЕАСТ</option>
+                            <option value="canada">Канада</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-secondary btn-lg btn-block">Расчитать стоимость</button>
+            </form>
+        </div>
+        <div class="tab-pane fade" id="nav-motocycle" role="tabpanel" aria-labelledby="nav-motocycle-tab">
+            <form name="motocycle" class="mt-4 tax-form" method="post">
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label for="currencyMoto">Валюта</label>
+                        <select name="currency" id="currencyMoto" class="form-control">
+                            <option value="EUR" selected="">€</option>
+                            <option value="USD">$</option>
+                            <option value="UAH">грн.</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-8">
+                        <label for="priceMoto">Стоимость</label>
+                        <input name="price" class="form-control" id="priceMoto" placeholder="Стоимость" value="10000">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="countryMoto">Страна</label>
+                        <select name="country" id="countryMoto" class="form-control">
+                            <option value="default" selected="">Другие</option>
+                            <option value="eu">ЕС</option>
+                            <option value="east">ЕАСТ</option>
+                            <option value="canada">Канада</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="volumeMoto">Объем двигателя, см³</label>
+                        <input name="volume" id="volumeMoto" type="text" class="form-control"
+                               placeholder="Объем двигателя, см³" value="150">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="vehicleTypeMoto">Тип</label>
+                        <select name="vehicleType" id="vehicleTypeMoto" class="form-control">
+                            <option value="motocycle" selected="">Мотоцикл</option>
+                            <option value="scooter">Мотороллер</option>
+                            <option value="moped">Мопед</option>
+                            <option value="default">другое</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-secondary btn-lg btn-block">Расчитать стоимость</button>
+            </form>
+        </div>
+        <div class="tab-pane fade" id="nav-truck" role="tabpanel" aria-labelledby="nav-truck-tab">
+            <form name="truck" class="mt-4 tax-form" method="post">
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label for="currencyTruck">Валюта</label>
+                        <select name="currency" id="currencyTruck" class="form-control">
+                            <option value="EUR" selected="">€</option>
+                            <option value="USD">$</option>
+                            <option value="UAH">грн.</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-8">
+                        <label for="priceTruck">Стоимость</label>
+                        <input name="price" class="form-control" id="priceTruck" placeholder="Стоимость" value="10000">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="countryTruck">Страна</label>
+                        <select name="country" id="countryTruck" class="form-control">
+                            <option value="default" selected="">Другие</option>
+                            <option value="eu">ЕС</option>
+                            <option value="east">ЕАСТ</option>
+                            <option value="canada">Канада</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="volumeTruck">Объем двигателя</label>
+                        <select name="volume" id="volumeTruck" class="form-control">
+                            <option value="1.0">1.0 дм³</option>
+                            <option value="1.1">1.1 дм³</option>
+                            <option value="1.2">1.2 дм³</option>
+                            <option value="1.3">1.3 дм³</option>
+                            <option value="1.4">1.4 дм³</option>
+                            <option value="1.5">1.5 дм³</option>
+                            <option value="1.6">1.6 дм³</option>
+                            <option value="1.7">1.7 дм³</option>
+                            <option value="1.8">1.8 дм³</option>
+                            <option value="1.9">1.9 дм³</option>
+                            <option value="2.0" selected="">2.0 дм³</option>
+                            <option value="2.1">2.1 дм³</option>
+                            <option value="2.2">2.2 дм³</option>
+                            <option value="2.3">2.3 дм³</option>
+                            <option value="2.4">2.4 дм³</option>
+                            <option value="2.5">2.5 дм³</option>
+                            <option value="2.6">2.6 дм³</option>
+                            <option value="2.7">2.7 дм³</option>
+                            <option value="2.8">2.8 дм³</option>
+                            <option value="2.9">2.9 дм³</option>
+                            <option value="3.0">3.0 дм³</option>
+                            <option value="3.1">3.1 дм³</option>
+                            <option value="3.2">3.2 дм³</option>
+                            <option value="3.3">3.3 дм³</option>
+                            <option value="3.4">3.4 дм³</option>
+                            <option value="3.5">3.5 дм³</option>
+                            <option value="3.6">3.6 дм³</option>
+                            <option value="3.7">3.7 дм³</option>
+                            <option value="3.8">3.8 дм³</option>
+                            <option value="3.9">3.9 дм³</option>
+                            <option value="4.0">4.0 дм³</option>
+                            <option value="4.1">4.1 дм³</option>
+                            <option value="4.2">4.2 дм³</option>
+                            <option value="4.3">4.3 дм³</option>
+                            <option value="4.4">4.4 дм³</option>
+                            <option value="4.5">4.5 дм³</option>
+                            <option value="4.6">4.6 дм³</option>
+                            <option value="4.7">4.7 дм³</option>
+                            <option value="4.8">4.8 дм³</option>
+                            <option value="4.9">4.9 дм³</option>
+                            <option value="5.0">5.0 дм³</option>
+                            <option value="5.1">5.1 дм³</option>
+                            <option value="5.2">5.2 дм³</option>
+                            <option value="5.3">5.3 дм³</option>
+                            <option value="5.4">5.4 дм³</option>
+                            <option value="5.5">5.5 дм³</option>
+                            <option value="5.6">5.6 дм³</option>
+                            <option value="5.7">5.7 дм³</option>
+                            <option value="5.8">5.8 дм³</option>
+                            <option value="5.9">5.9 дм³</option>
+                            <option value="6.0">6.0 дм³</option>
+                            <option value="6.1">6.1 дм³</option>
+                            <option value="6.2">6.2 дм³</option>
+                            <option value="6.3">6.3 дм³</option>
+                            <option value="6.4">6.4 дм³</option>
+                            <option value="6.5">6.5 дм³</option>
+                            <option value="6.6">6.6 дм³</option>
+                            <option value="6.7">6.7 дм³</option>
+                            <option value="6.8">6.8 дм³</option>
+                            <option value="6.9">6.9 дм³</option>
+                            <option value="7.0">7.0 дм³</option>
+                            <option value="7.1">7.1 дм³</option>
+                            <option value="7.2">7.2 дм³</option>
+                            <option value="7.3">7.3 дм³</option>
+                            <option value="7.4">7.4 дм³</option>
+                            <option value="7.5">7.5 дм³</option>
+                            <option value="7.6">7.6 дм³</option>
+                            <option value="7.7">7.7 дм³</option>
+                            <option value="7.8">7.8 дм³</option>
+                            <option value="7.9">7.9 дм³</option>
+                            <option value="8.0">8.0 дм³</option>
+                            <option value="8.1">8.1 дм³</option>
+                            <option value="8.2">8.2 дм³</option>
+                            <option value="8.3">8.3 дм³</option>
+                            <option value="8.4">8.4 дм³</option>
+                            <option value="8.5">8.5 дм³</option>
+                            <option value="8.6">8.6 дм³</option>
+                            <option value="8.7">8.7 дм³</option>
+                            <option value="8.8">8.8 дм³</option>
+                            <option value="8.9">8.9 дм³</option>
+                            <option value="9.0">9.0 дм³</option>
+                            <option value="9.1">9.1 дм³</option>
+                            <option value="9.2">9.2 дм³</option>
+                            <option value="9.3">9.3 дм³</option>
+                            <option value="9.4">9.4 дм³</option>
+                            <option value="9.5">9.5 дм³</option>
+                            <option value="9.6">9.6 дм³</option>
+                            <option value="9.7">9.7 дм³</option>
+                            <option value="9.8">9.8 дм³</option>
+                            <option value="9.9">9.9 дм³</option>
+                            <option value="10.0">10.0 дм³</option>
+                            <option value="10.1">10.1 дм³</option>
+                            <option value="10.2">10.2 дм³</option>
+                            <option value="10.3">10.3 дм³</option>
+                            <option value="10.4">10.4 дм³</option>
+                            <option value="10.5">10.5 дм³</option>
+                            <option value="10.6">10.6 дм³</option>
+                            <option value="10.7">10.7 дм³</option>
+                            <option value="10.8">10.8 дм³</option>
+                            <option value="10.9">10.9 дм³</option>
+                            <option value="11.0">11.0 дм³</option>
+                            <option value="11.1">11.1 дм³</option>
+                            <option value="11.2">11.2 дм³</option>
+                            <option value="11.3">11.3 дм³</option>
+                            <option value="11.4">11.4 дм³</option>
+                            <option value="11.5">11.5 дм³</option>
+                            <option value="11.6">11.6 дм³</option>
+                            <option value="11.7">11.7 дм³</option>
+                            <option value="11.8">11.8 дм³</option>
+                            <option value="11.9">11.9 дм³</option>
+                            <option value="12.0">12.0 дм³</option>
+                            <option value="12.1">12.1 дм³</option>
+                            <option value="12.2">12.2 дм³</option>
+                            <option value="12.3">12.3 дм³</option>
+                            <option value="12.4">12.4 дм³</option>
+                            <option value="12.5">12.5 дм³</option>
+                            <option value="12.6">12.6 дм³</option>
+                            <option value="12.7">12.7 дм³</option>
+                            <option value="12.8">12.8 дм³</option>
+                            <option value="12.9">12.9 дм³</option>
+                            <option value="13.0">13.0 дм³</option>
+                            <option value="13.1">13.1 дм³</option>
+                            <option value="13.2">13.2 дм³</option>
+                            <option value="13.3">13.3 дм³</option>
+                            <option value="13.4">13.4 дм³</option>
+                            <option value="13.5">13.5 дм³</option>
+                            <option value="13.6">13.6 дм³</option>
+                            <option value="13.7">13.7 дм³</option>
+                            <option value="13.8">13.8 дм³</option>
+                            <option value="13.9">13.9 дм³</option>
+                            <option value="14.0">14.0 дм³</option>
+                            <option value="14.1">14.1 дм³</option>
+                            <option value="14.2">14.2 дм³</option>
+                            <option value="14.3">14.3 дм³</option>
+                            <option value="14.4">14.4 дм³</option>
+                            <option value="14.5">14.5 дм³</option>
+                            <option value="14.6">14.6 дм³</option>
+                            <option value="14.7">14.7 дм³</option>
+                            <option value="14.8">14.8 дм³</option>
+                            <option value="14.9">14.9 дм³</option>
+                            <option value="15.0">15.0 дм³</option>
+                            <option value="15.1">15.1 дм³</option>
+                            <option value="15.2">15.2 дм³</option>
+                            <option value="15.3">15.3 дм³</option>
+                            <option value="15.4">15.4 дм³</option>
+                            <option value="15.5">15.5 дм³</option>
+                            <option value="15.6">15.6 дм³</option>
+                            <option value="15.7">15.7 дм³</option>
+                            <option value="15.8">15.8 дм³</option>
+                            <option value="15.9">15.9 дм³</option>
+                            <option value="16.0">16.0 дм³</option>
+                            <option value="16.1">16.1 дм³</option>
+                            <option value="16.2">16.2 дм³</option>
+                            <option value="16.3">16.3 дм³</option>
+                            <option value="16.4">16.4 дм³</option>
+                            <option value="16.5">16.5 дм³</option>
+                            <option value="16.6">16.6 дм³</option>
+                            <option value="16.7">16.7 дм³</option>
+                            <option value="16.8">16.8 дм³</option>
+                            <option value="16.9">16.9 дм³</option>
+                            <option value="17.0">17.0 дм³</option>
+                            <option value="17.1">17.1 дм³</option>
+                            <option value="17.2">17.2 дм³</option>
+                            <option value="17.3">17.3 дм³</option>
+                            <option value="17.4">17.4 дм³</option>
+                            <option value="17.5">17.5 дм³</option>
+                            <option value="17.6">17.6 дм³</option>
+                            <option value="17.7">17.7 дм³</option>
+                            <option value="17.8">17.8 дм³</option>
+                            <option value="17.9">17.9 дм³</option>
+                            <option value="18.0">18.0 дм³</option>
+                            <option value="18.1">18.1 дм³</option>
+                            <option value="18.2">18.2 дм³</option>
+                            <option value="18.3">18.3 дм³</option>
+                            <option value="18.4">18.4 дм³</option>
+                            <option value="18.5">18.5 дм³</option>
+                            <option value="18.6">18.6 дм³</option>
+                            <option value="18.7">18.7 дм³</option>
+                            <option value="18.8">18.8 дм³</option>
+                            <option value="18.9">18.9 дм³</option>
+                            <option value="19.0">19.0 дм³</option>
+                            <option value="19.1">19.1 дм³</option>
+                            <option value="19.2">19.2 дм³</option>
+                            <option value="19.3">19.3 дм³</option>
+                            <option value="19.4">19.4 дм³</option>
+                            <option value="19.5">19.5 дм³</option>
+                            <option value="19.6">19.6 дм³</option>
+                            <option value="19.7">19.7 дм³</option>
+                            <option value="19.8">19.8 дм³</option>
+                            <option value="19.9">19.9 дм³</option>
+                            <option value="20.0">20.0 дм³</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="weightTruck">Полная масса, кг</label>
+                        <input name="weight" class="form-control" id="weightTruck" placeholder="Полная масса, кг"
+                               value="5000">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="yearTruck">Год выпуска</label>
+                        <select name="year" id="yearTruck" class="form-control">
+                            <option value="2020" selected="">2019-2020</option>
+                            <option value="2018">2018</option>
+                            <option value="2017">2017</option>
+                            <option value="2016">2016</option>
+                            <option value="2015">2015</option>
+                            <option value="2014">2014</option>
+                            <option value="2013">2013</option>
+                            <option value="2012">2012</option>
+                            <option value="2011">2011 и старше</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="motorTruck">Тип топлива</label>
+                        <select name="motor" id="motorTruck" class="form-control">
+                            <option value="petrol" selected="">Бензин</option>
+                            <option value="diesel">Дизель</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="vehicleTypeTruck">Тип кузова</label>
+                        <select name="vehicleType" id="vehicleTypeTruck" class="form-control">
+                            <option value="lorry" selected="">Грузовик</option>
+                            <option value="truck">Тягач (фура)</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-secondary btn-lg btn-block">Расчитать стоимость</button>
+            </form>
+        </div>
+    </div>
+    <div class="result-block d-none">
+        <table class="taxes-table table">
+            <tbody>
+            <tr class="table-s">
+                <td>Цена без растаможки</td>
+                <td class="orig-price"></td>
+            </tr>
+            <tr class="table-separator">
+                <td>НДС</td>
+                <td class="nds"></td>
+            </tr>
+            <tr>
+                <td>Пошлина</td>
+                <td class="duty"></td>
+            </tr>
+            <tr>
+                <td>Акцизный сбор</td>
+                <td class="excise"></td>
+            </tr>
+            <tr>
+                <td>Пенсионный фонд</td>
+                <td class="pension-fund"></td>
+            </tr>
+            <tr class="table-separator">
+                <td>Всего таможенных платежей</td>
+                <td class="all-fees"></td>
+            </tr>
+            <tr class="table-separator">
+                <td>Процент от суммы покупки</td>
+                <td class="percent-price"></td>
+            </tr>
+            <tr class="font-weight-bold table-secondary taxes-table__total-price-row">
+                <td>Цена с растаможкой</td>
+                <td class="result-price"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script src="taxes.js"></script>
+</div>
+</body>
+</html>
